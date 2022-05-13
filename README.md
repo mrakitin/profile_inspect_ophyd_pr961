@@ -24,7 +24,7 @@ In [2]:
 ### With `OPHYD_DEBUG_WITH_INSPECT=1`
 
 ```py
-13:53 $ OPHYD_DEBUG_WITH_INSPECT=1 ipython --profile=inspect_ophyd_pr961
+$ OPHYD_DEBUG_WITH_INSPECT=1 ipython --profile=inspect_ophyd_pr961
 Python 3.9.12 | packaged by conda-forge | (main, Mar 24 2022, 23:25:59)
 Type 'copyright', 'credits' or 'license' for more information
 IPython 8.2.0 -- An enhanced Interactive Python. Type '?' for help.
@@ -512,21 +512,21 @@ Subclassing TetrAMM...
 Subclassing APS_EM...
 Subclassing MyDev...
 Loading /home/vagrant/.ipython/profile_inspect_ophyd_pr961/startup/01-devices.py...
+Initializing MyDev...
+Initializing Signal...
 
 In [1]: durations
 Out[1]:
-{'/home/vagrant/.ipython/profile_inspect_ophyd_pr961/startup/00-base.py': 40.80566760500005,
- '/home/vagrant/.ipython/profile_inspect_ophyd_pr961/startup/01-devices.py': 0.00559572499969363}
-
-In [2]:
+{'/home/vagrant/.ipython/profile_inspect_ophyd_pr961/startup/00-base.py': 42.23476164300064,
+ '/home/vagrant/.ipython/profile_inspect_ophyd_pr961/startup/01-devices.py': 0.009821958999964409}
 ```
 
 ### Details of the stack
 
 ```py
-In [4]: my_dev._stack_init
-Out[4]:
-['/home/vagrant/src/ophyd/ophyd/ophydobj.py:159',
+In [2]: my_dev._stack_init
+Out[2]:
+['/home/vagrant/src/ophyd/ophyd/ophydobj.py:160',
  '/home/vagrant/src/ophyd/ophyd/device.py:414',
  '/home/vagrant/src/ophyd/ophyd/device.py:725',
  '/home/vagrant/.ipython/profile_inspect_ophyd_pr961/startup/01-devices.py:6',
@@ -541,9 +541,9 @@ Out[4]:
  '/home/vagrant/conda_envs/2022-2.3-py39/lib/python3.9/site-packages/IPython/__init__.py:123',
  '/home/vagrant/conda_envs/2022-2.3-py39/bin/ipython:11']
 
-In [5]: my_dev._stack_subclass
-Out[5]:
-['/home/vagrant/src/ophyd/ophyd/ophydobj.py:245',
+In [3]: my_dev._stack_subclass
+Out[3]:
+['/home/vagrant/src/ophyd/ophyd/ophydobj.py:246',
  '/home/vagrant/src/ophyd/ophyd/device.py:838',
  '/home/vagrant/.ipython/profile_inspect_ophyd_pr961/startup/00-base.py:11',
  '/home/vagrant/conda_envs/2022-2.3-py39/lib/python3.9/site-packages/IPython/utils/py3compat.py:55',
@@ -556,8 +556,6 @@ Out[5]:
  '/home/vagrant/conda_envs/2022-2.3-py39/lib/python3.9/site-packages/traitlets/config/application.py:845',
  '/home/vagrant/conda_envs/2022-2.3-py39/lib/python3.9/site-packages/IPython/__init__.py:123',
  '/home/vagrant/conda_envs/2022-2.3-py39/bin/ipython:11']
-
-In [6]:
 ```
 
 ### With prints disabled
@@ -578,4 +576,112 @@ Out[1]:
  '/home/vagrant/.ipython/profile_inspect_ophyd_pr961/startup/01-devices.py': 0.010561430999587174}
 
 In [2]:
+```
+
+### To address questions about `%edit` and `obj?` IPython magics
+
+```py
+In [4]: my_dev?
+Type:            MyDev
+String form:     MyDev(prefix='', name='my_dev', read_attrs=['sig'], configuration_attrs=[])
+Docstring:       <no docstring>
+Class docstring:
+Base class for device objects
+
+This class provides attribute access to one or more Signals, which can be
+a mixture of read-only and writable. All must share the same base_name.
+
+Parameters
+----------
+prefix : str, optional
+    The PV prefix for all components of the device
+name : str, keyword only
+    The name of the device (as will be reported via read()`
+kind : a member of the :class:`~ophydobj.Kind` :class:`~enum.IntEnum`
+    (or equivalent integer), optional
+    Default is ``Kind.normal``. See :class:`~ophydobj.Kind` for options.
+read_attrs : sequence of attribute names
+    DEPRECATED: the components to include in a normal reading
+    (i.e., in ``read()``)
+configuration_attrs : sequence of attribute names
+    DEPRECATED: the components to be read less often (i.e., in
+    ``read_configuration()``) and to adjust via ``configure()``
+parent : instance or None, optional
+    The instance of the parent device, if applicable
+
+Attributes
+----------
+lazy_wait_for_connection : bool
+    When instantiating a lazy signal upon first access, wait for it to
+    connect before returning control to the user.  See also the context
+    manager helpers: ``wait_for_lazy_connection`` and
+    ``do_not_wait_for_lazy_connection``.
+
+Subscriptions
+-------------
+SUB_ACQ_DONE
+    A one-time subscription indicating the requested trigger-based
+    acquisition has completed.
+
+In [5]: %edit my_dev
+/home/vagrant/conda_envs/2022-2.3-py39/lib/python3.9/site-packages/IPython/core/magics/code.py:514: UserWarning: The file where `MyDev(prefix='', name='my_dev', read_attrs=['sig'], configuration_attrs=[])` was defined cannot be read or found.
+  warn('The file where `%s` was defined '
+
+In [6]: MyDev?
+Init signature:
+MyDev(
+    prefix='',
+    *,
+    name,
+    kind=None,
+    read_attrs=None,
+    configuration_attrs=None,
+    parent=None,
+    **kwargs,
+)
+Docstring:
+Base class for device objects
+
+This class provides attribute access to one or more Signals, which can be
+a mixture of read-only and writable. All must share the same base_name.
+
+Parameters
+----------
+prefix : str, optional
+    The PV prefix for all components of the device
+name : str, keyword only
+    The name of the device (as will be reported via read()`
+kind : a member of the :class:`~ophydobj.Kind` :class:`~enum.IntEnum`
+    (or equivalent integer), optional
+    Default is ``Kind.normal``. See :class:`~ophydobj.Kind` for options.
+read_attrs : sequence of attribute names
+    DEPRECATED: the components to include in a normal reading
+    (i.e., in ``read()``)
+configuration_attrs : sequence of attribute names
+    DEPRECATED: the components to be read less often (i.e., in
+    ``read_configuration()``) and to adjust via ``configure()``
+parent : instance or None, optional
+    The instance of the parent device, if applicable
+
+Attributes
+----------
+lazy_wait_for_connection : bool
+    When instantiating a lazy signal upon first access, wait for it to
+    connect before returning control to the user.  See also the context
+    manager helpers: ``wait_for_lazy_connection`` and
+    ``do_not_wait_for_lazy_connection``.
+
+Subscriptions
+-------------
+SUB_ACQ_DONE
+    A one-time subscription indicating the requested trigger-based
+    acquisition has completed.
+Type:           type
+Subclasses:
+
+In [7]: %edit MyDev
+/home/vagrant/conda_envs/2022-2.3-py39/lib/python3.9/site-packages/IPython/core/magics/code.py:514: UserWarning: The file where `<class '__main__.MyDev'>` was defined cannot be read or found.
+  warn('The file where `%s` was defined '
+
+In [8]:
 ```

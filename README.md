@@ -559,3 +559,23 @@ Out[5]:
 
 In [6]:
 ```
+
+### With prints disabled
+
+```py
+$ OPHYD_DEBUG_WITH_INSPECT=1 ipython --profile=inspect_ophyd_pr961
+Python 3.9.12 | packaged by conda-forge | (main, Mar 24 2022, 23:25:59)
+Type 'copyright', 'credits' or 'license' for more information
+IPython 8.2.0 -- An enhanced Interactive Python. Type '?' for help.
+
+IPython profile: inspect_ophyd_pr961
+Loading /home/vagrant/.ipython/profile_inspect_ophyd_pr961/startup/00-base.py...
+Loading /home/vagrant/.ipython/profile_inspect_ophyd_pr961/startup/01-devices.py...
+
+In [1]: durations
+Out[1]:
+{'/home/vagrant/.ipython/profile_inspect_ophyd_pr961/startup/00-base.py': 30.59792269099944,
+ '/home/vagrant/.ipython/profile_inspect_ophyd_pr961/startup/01-devices.py': 0.010561430999587174}
+
+In [2]:
+```
